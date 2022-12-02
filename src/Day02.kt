@@ -9,7 +9,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        val output = input.map{convertToPair(it)}.also { println(it) }.sumOf { it.second.value + it.second.score(it.first) }
+        val output = input.map{convertToPair(it)}.sumOf { it.second.value + it.second.score(it.first) }
         return output
     }
 
