@@ -24,3 +24,14 @@ fun List<String>.splitOnEmpty(): List<List<Int>>{
     }
     return output
 }
+
+fun <T> Iterable<Iterable<T>>.transpose(): Iterable<Iterable<T>>{
+    val result = List(this.maxOf { it.count() }){mutableListOf<T>()}
+
+    this.forEach { ts ->
+        ts.forEachIndexed { j, t ->
+            result[j].add(t)
+        }
+    }
+    return result
+}
