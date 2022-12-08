@@ -3,68 +3,46 @@ import java.lang.Error
 fun main() {
 
 
-    fun part1(input: List<String>): Long {
+
+
+    fun createStructure(input: List<String>): Directory {
         val structure = Directory("root")
         var currentItem: Directory? = null
         val parents = mutableMapOf<String, Directory>()
         input.forEach { line ->
             val items = line.split(" ")
-            if(items[0]=="$"){
-                if(items[1]=="cd"){
-                    if(items[2]=="/"){
+            if (items[0] == "$") {
+                if (items[1] == "cd") {
+                    if (items[2] == "/") {
                         currentItem = structure
-                    } else if(items[2]== ".."){
+                    } else if (items[2] == "..") {
                         currentItem = parents[currentItem?.name]
                     } else {
-                        currentItem = currentItem?.directories?.find { it.name == currentItem?.name+ "/"+items[2] }
+                        currentItem = currentItem?.directories?.find { it.name == currentItem?.name + "/" + items[2] }
                     }
                 }
             } else {
-                if(items[0]=="dir"){
-                    val directory = Directory(currentItem?.name+ "/" + items[1])
+                if (items[0] == "dir") {
+                    val directory = Directory(currentItem?.name + "/" + items[1])
                     currentItem?.directories?.add(directory)
                     currentItem?.also { parents[directory.name] = it }
-                }
-                else {
+                } else {
                     currentItem?.files?.add(File(items[1], items[0].toLong()))
                 }
 
             }
         }
-        println(structure)
-        val x = structure.getDirectoriesWithSizeBelow(100000)
+        return structure
+    }
 
+    fun part1(input: List<String>): Long {
+        val structure = createStructure(input)
+        val x = structure.getDirectoriesWithSizeBelow(100000)
         return x.sumOf { it.getSize() }
     }
 
     fun part2(input: List<String>): Long {
-        val structure = Directory("root")
-        var currentItem: Directory? = null
-        val parents = mutableMapOf<String, Directory>()
-        input.forEach { line ->
-            val items = line.split(" ")
-            if(items[0]=="$"){
-                if(items[1]=="cd"){
-                    if(items[2]=="/"){
-                        currentItem = structure
-                    } else if(items[2]== ".."){
-                        currentItem = parents[currentItem?.name]
-                    } else {
-                        currentItem = currentItem?.directories?.find { it.name == currentItem?.name+ "/"+items[2] }
-                    }
-                }
-            } else {
-                if(items[0]=="dir"){
-                    val directory = Directory(currentItem?.name+ "/" + items[1])
-                    currentItem?.directories?.add(directory)
-                    currentItem?.also { parents[directory.name] = it }
-                }
-                else {
-                    currentItem?.files?.add(File(items[1], items[0].toLong()))
-                }
-
-            }
-        }
+        val structure = createStructure(input)
         val totalSize = 30000000 - 70000000 + structure.getSize()
         val items = structure.getDirectoriesWithSizeAbove(totalSize).minBy { it.getSize() }
         return items.getSize()
