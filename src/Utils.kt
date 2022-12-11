@@ -24,6 +24,17 @@ fun List<String>.splitOnEmpty(): List<List<Int>>{
     }
     return output
 }
+fun List<String>.splitOnEmptyString(): List<List<String>>{
+    val output = mutableListOf(mutableListOf<String>())
+    this.forEach {
+        if(it.isNotEmpty()){
+            output.last().add(it)
+        } else {
+            output.add(mutableListOf())
+        }
+    }
+    return output
+}
 
 fun <T> Iterable<Iterable<T>>.transpose(): Iterable<Iterable<T>>{
     val result = List(this.maxOf { it.count() }){mutableListOf<T>()}
