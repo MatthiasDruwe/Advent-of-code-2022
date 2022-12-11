@@ -24,3 +24,15 @@ fun List<String>.splitOnEmpty(): List<List<Int>>{
     }
     return output
 }
+
+fun List<T>.splitOnEmptyString(): List<List<T>>{
+    val output = mutableListOf(mutableListOf<String>())
+    this.forEach {
+        if(!it.isEmpty()){
+            output.last().add(it.toInt())
+        } else {
+            output.add(mutableListOf())
+        }
+    }
+    return output
+}
